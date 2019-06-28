@@ -1,0 +1,3 @@
+[submodule "inventory/kubespray_config"]
+	path = inventory/kubespray_config
+	url = git@github.com:pingod/kubespray_config.git
