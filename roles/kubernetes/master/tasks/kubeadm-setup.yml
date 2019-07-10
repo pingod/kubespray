@@ -103,15 +103,19 @@
 
 - name: kubeadm | Initialize first master
   command: >-
-    timeout -k 600s 600s
+    timeout -k 300s 300s
     {{ bin_dir }}/kubeadm init
     --config={{ kube_config_dir }}/kubeadm-config.yaml
     --ignore-preflight-errors=all
     --skip-phases=addon/coredns
     {% if kubeadm_version is version('v1.14.0', '>=') %}
+    {% if kubeadm_version is version('v1.15.0', '<') %}
     --experimental-upload-certs
     {% if kubeadm_certificate_key is defined %}
     --certificate-key={{ kubeadm_certificate_key }}
+    {% endif %}
+    {% else %}
+    --upload-certs
     {% endif %}
     {% endif %}
   register: kubeadm_init

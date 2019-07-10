@@ -108,7 +108,7 @@ Supported Components
 --------------------
 
 -   Core
-    -   [kubernetes](https://github.com/kubernetes/kubernetes) v1.14.3
+    -   [kubernetes](https://github.com/kubernetes/kubernetes) v1.15.0
     -   [etcd](https://github.com/coreos/etcd) v3.3.10
     -   [docker](https://www.docker.com/) v18.06 (see note)
     -   [cri-o](http://cri-o.io/) v1.11.5 (experimental: see [CRI-O Note](docs/cri-o.md). Only on centos based OS)
@@ -177,6 +177,8 @@ You can choose between 6 network plugins. (default: `calico`, except Vagrant use
     simplicity and high performance: it uses IPVS to provide Kube Services Proxy (if setup to replace kube-proxy),
     iptables for network policies, and BGP for ods L3 networking (with optionally BGP peering with out-of-cluster BGP peers).
     It can also optionally advertise routes to Kubernetes cluster Pods CIDRs, ClusterIPs, ExternalIPs and LoadBalancerIPs.
+
+-   [macvlan](docs/macvlan.md): Macvlan is a Linux network driver. Pods have their own unique Mac and Ip address, connected directly the physical (layer 2) network.
 
 -   [multus](docs/multus.md): Multus is a meta CNI plugin that provides multiple network interface support to pods. For each interface Multus delegates CNI calls to secondary CNI plugins such as Calico, macvlan, etc.
 
