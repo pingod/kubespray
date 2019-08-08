@@ -71,6 +71,11 @@ packet_ubuntu18-cilium-sep:
   <<: *packet
   when: manual
 
+packet_ubuntu18-flannel-containerd:
+  stage: deploy-part2
+  <<: *packet
+  when: manual
+
 packet_debian9-macvlan-sep:
   stage: deploy-part2
   <<: *packet
@@ -85,6 +90,11 @@ packet_centos7-calico-ha:
   stage: deploy-part2
   <<: *packet
   when: manual
+
+packet_centos7-kube-ovn:
+  stage: deploy-part2
+  <<: *packet
+  when: on_success
 
 packet_centos7-kube-router:
   stage: deploy-part2

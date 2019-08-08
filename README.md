@@ -109,7 +109,7 @@ Supported Components
 --------------------
 
 -   Core
-    -   [kubernetes](https://github.com/kubernetes/kubernetes) v1.15.0
+    -   [kubernetes](https://github.com/kubernetes/kubernetes) v1.15.1
     -   [etcd](https://github.com/coreos/etcd) v3.3.10
     -   [docker](https://www.docker.com/) v18.06 (see note)
     -   [cri-o](http://cri-o.io/) v1.11.5 (experimental: see [CRI-O Note](docs/cri-o.md). Only on centos based OS)
@@ -117,7 +117,7 @@ Supported Components
     -   [cni-plugins](https://github.com/containernetworking/plugins) v0.8.1
     -   [calico](https://github.com/projectcalico/calico) v3.7.3
     -   [canal](https://github.com/projectcalico/canal) (given calico/flannel versions)
-    -   [cilium](https://github.com/cilium/cilium) v1.3.0
+    -   [cilium](https://github.com/cilium/cilium) v1.5.5
     -   [contiv](https://github.com/contiv/install) v1.2.1
     -   [flanneld](https://github.com/coreos/flannel) v0.11.0
     -   [kube-router](https://github.com/cloudnativelabs/kube-router) v0.2.5
@@ -127,7 +127,7 @@ Supported Components
     -   [cephfs-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.0-k8s1.11
     -   [rbd-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.1-k8s1.11
     -   [cert-manager](https://github.com/jetstack/cert-manager) v0.5.2
-    -   [coredns](https://github.com/coredns/coredns) v1.5.2
+    -   [coredns](https://github.com/coredns/coredns) v1.6.0
     -   [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.21.0
 
 Note: The list of validated [docker versions](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.13.md) was updated to 1.11.1, 1.12.1, 1.13.1, 17.03, 17.06, 17.09, 18.06. kubeadm now properly recognizes Docker 18.09.0 and newer, but still treats 18.06 as the default supported version. The kubelet might break on docker's non-standard version numbering (it no longer uses semantic versioning). To ensure auto-updates don't break your cluster look into e.g. yum versionlock plugin or apt pin).
@@ -158,7 +158,7 @@ These limits are safe guarded by Kubespray. Actual requirements for your workloa
 Network Plugins
 ---------------
 
-You can choose between 6 network plugins. (default: `calico`, except Vagrant uses `flannel`)
+You can choose between 10 network plugins. (default: `calico`, except Vagrant uses `flannel`)
 
 -   [flannel](docs/flannel.md): gre/vxlan (layer 2) networking.
 
@@ -173,6 +173,8 @@ You can choose between 6 network plugins. (default: `calico`, except Vagrant use
 
 -   [weave](docs/weave.md): Weave is a lightweight container overlay network that doesn't require an external K/V database cluster.
     (Please refer to `weave` [troubleshooting documentation](https://www.weave.works/docs/net/latest/troubleshooting/)).
+
+-   [kube-ovn](docs/kube-ovn.md): Kube-OVN integrates the OVN-based Network Virtualization with Kubernetes. It offers an advanced Container Network Fabric for Enterprises.
 
 -   [kube-router](docs/kube-router.md): Kube-router is a L3 CNI for Kubernetes networking aiming to provide operational
     simplicity and high performance: it uses IPVS to provide Kube Services Proxy (if setup to replace kube-proxy),
