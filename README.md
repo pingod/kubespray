@@ -109,7 +109,7 @@ Supported Components
 --------------------
 
 -   Core
-    -   [kubernetes](https://github.com/kubernetes/kubernetes) v1.15.1
+    -   [kubernetes](https://github.com/kubernetes/kubernetes) v1.15.2
     -   [etcd](https://github.com/coreos/etcd) v3.3.10
     -   [docker](https://www.docker.com/) v18.06 (see note)
     -   [cri-o](http://cri-o.io/) v1.11.5 (experimental: see [CRI-O Note](docs/cri-o.md). Only on centos based OS)
@@ -134,7 +134,7 @@ Note: The list of validated [docker versions](https://github.com/kubernetes/kube
 
 Requirements
 ------------
--   **Minimum required version of Kubernetes is v1.13**
+-   **Minimum required version of Kubernetes is v1.14**
 -   **Ansible v2.7.8 (or newer, but [not 2.8.x](https://github.com/kubernetes-sigs/kubespray/issues/4778)) and python-netaddr is installed on the machine
     that will run Ansible commands**
 -   **Jinja 2.9 (or newer) is required to run the Ansible Playbooks**
