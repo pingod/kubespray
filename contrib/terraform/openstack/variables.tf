@@ -3,8 +3,14 @@ variable "cluster_name" {
 }
 
 variable "az_list" {
-  description = "List of Availability Zones available in your OpenStack cluster"
-  type        = "list"
+  description = "List of Availability Zones to use for masters in your OpenStack cluster"
+  type        = list(string)
+  default     = ["nova"]
+}
+
+variable "az_list_node" {
+  description = "List of Availability Zones to use for nodes in your OpenStack cluster"
+  type        = list(string)
   default     = ["nova"]
 }
 
@@ -209,4 +215,8 @@ variable "worker_allowed_ports" {
 
 variable "use_access_ip" {
   default = 1
+}
+
+variable "use_server_groups" {
+  default = false
 }

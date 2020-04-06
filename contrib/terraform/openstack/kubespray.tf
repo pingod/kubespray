@@ -32,6 +32,7 @@ module "compute" {
 
   cluster_name                                 = "${var.cluster_name}"
   az_list                                      = "${var.az_list}"
+  az_list_node                                 = "${var.az_list_node}"
   number_of_k8s_masters                        = "${var.number_of_k8s_masters}"
   number_of_k8s_masters_no_etcd                = "${var.number_of_k8s_masters_no_etcd}"
   number_of_etcd                               = "${var.number_of_etcd}"
@@ -71,6 +72,7 @@ module "compute" {
   worker_allowed_ports                         = "${var.worker_allowed_ports}"
   wait_for_floatingip                          = "${var.wait_for_floatingip}"
   use_access_ip                                = "${var.use_access_ip}"
+  use_server_groups                            = "${var.use_server_groups}"
 
   network_id = "${module.network.router_id}"
 }
