@@ -54,6 +54,7 @@
   with_items:
     - /etc/crio
     - /etc/containers
+    - /etc/systemd/system/crio.service.d
   file:
     path: "{{ item }}"
     state: directory
@@ -64,6 +65,7 @@
     state: present
   when: not is_ostree
   with_items: "{{ crio_packages }}"
+  notify: restart crio
 
 - name: Check if already installed
   stat:
@@ -71,15 +73,33 @@
   register: need_bootstrap_crio
   when: is_ostree
 
+- name: Enable modular repos for crio
+  ini_file:
+    path: "/etc/yum.repos.d/{{ item }}.repo"
+    section: "{{ item }}"
+    option: enabled
+    value: 1
+  become: true
+  when:
+    - is_ostree
+    - not need_bootstrap_crio.stat.exists
+  loop:
+    - "fedora-updates-modular"
+    - "fedora-modular"
+
 - name: Install cri-o packages with osttree
-  raw: "export http_proxy={{ http_proxy | default('') }} && rpm-ostree install {{ crio_packages|join(' ') }}"
-  when: is_ostree and not need_bootstrap_crio.stat.exists
+  command: "rpm-ostree install {{ crio_packages|join(' ') }}"
+  when:
+    - is_ostree
+    - not need_bootstrap_crio.stat.exists
   become: true
 
 - name: Reboot immediately for updated ostree
   reboot:
   become: true
-  when: is_ostree and not need_bootstrap_crio.stat.exists
+  when:
+    - is_ostree
+    - not need_bootstrap_crio.stat.exists
 
 - name: Install cri-o config
   template:
@@ -92,6 +112,7 @@
     dest: /etc/containers/mounts.conf
   when:
     - ansible_os_family == 'RedHat'
+  notify: restart crio
 
 - name: Create directory for oci hooks
   file:
@@ -100,12 +121,9 @@
     owner: root
     mode: 0755
 
-- name: Reload systemd daemon
-  systemd:
-    daemon_reload: yes
-
-- name: Install cri-o service
-  service:
-    name: "{{ crio_service }}"
-    enabled: yes
-    state: restarted
+- name: Write cri-o proxy drop-in
+  template:
+    src: http-proxy.conf.j2
+    dest: /etc/systemd/system/crio.service.d/http-proxy.conf
+  notify: restart crio
+  when: http_proxy is defined or https_proxy is defined

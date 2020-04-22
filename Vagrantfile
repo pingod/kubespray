@@ -15,20 +15,21 @@ COREOS_URL_TEMPLATE = "https://storage.googleapis.com/%s.release.core-os.net/amd
 DISK_UUID = Time.now.utc.to_i
 
 SUPPORTED_OS = {
-  "coreos-stable"       => {box: "coreos-stable",      user: "core", box_url: COREOS_URL_TEMPLATE % ["stable"]},
-  "coreos-alpha"        => {box: "coreos-alpha",       user: "core", box_url: COREOS_URL_TEMPLATE % ["alpha"]},
-  "coreos-beta"         => {box: "coreos-beta",        user: "core", box_url: COREOS_URL_TEMPLATE % ["beta"]},
-  "ubuntu1604"          => {box: "generic/ubuntu1604", user: "vagrant"},
-  "ubuntu1804"          => {box: "generic/ubuntu1804", user: "vagrant"},
-  "ubuntu2004"          => {box: "geerlingguy/ubuntu2004", user: "vagrant"},
-  "centos"              => {box: "centos/7",           user: "vagrant"},
-  "centos-bento"        => {box: "bento/centos-7.6",   user: "vagrant"},
-  "centos8"             => {box: "centos/8",           user: "vagrant"},
-  "centos8-bento"       => {box: "bento/centos-8",           user: "vagrant"},
-  "fedora"              => {box: "fedora/28-cloud-base",                user: "vagrant"},
-  "opensuse"            => {box: "opensuse/openSUSE-15.0-x86_64",       user: "vagrant"},
-  "opensuse-tumbleweed" => {box: "opensuse/openSUSE-Tumbleweed-x86_64", user: "vagrant"},
-  "oraclelinux"         => {box: "generic/oracle7", user: "vagrant"},
+  "coreos-stable"       => {box: "coreos-stable",              user: "core", box_url: COREOS_URL_TEMPLATE % ["stable"]},
+  "coreos-alpha"        => {box: "coreos-alpha",               user: "core", box_url: COREOS_URL_TEMPLATE % ["alpha"]},
+  "coreos-beta"         => {box: "coreos-beta",                user: "core", box_url: COREOS_URL_TEMPLATE % ["beta"]},
+  "ubuntu1604"          => {box: "generic/ubuntu1604",         user: "vagrant"},
+  "ubuntu1804"          => {box: "generic/ubuntu1804",         user: "vagrant"},
+  "ubuntu2004"          => {box: "geerlingguy/ubuntu2004",     user: "vagrant"},
+  "centos"              => {box: "centos/7",                   user: "vagrant"},
+  "centos-bento"        => {box: "bento/centos-7.6",           user: "vagrant"},
+  "centos8"             => {box: "centos/8",                   user: "vagrant"},
+  "centos8-bento"       => {box: "bento/centos-8",             user: "vagrant"},
+  "fedora30"            => {box: "fedora/30-cloud-base",       user: "vagrant"},
+  "fedora31"            => {box: "fedora/31-cloud-base",       user: "vagrant"},
+  "opensuse"            => {box: "bento/opensuse-leap-15.1",   user: "vagrant"},
+  "opensuse-tumbleweed" => {box: "opensuse/Tumbleweed.x86_64", user: "vagrant"},
+  "oraclelinux"         => {box: "generic/oracle7",            user: "vagrant"},
 }
 
 if File.exist?(CONFIG)
@@ -43,7 +44,7 @@ $vm_memory ||= 2048
 $vm_cpus ||= 1
 $shared_folders ||= {}
 $forwarded_ports ||= {}
-$subnet ||= "172.17.8"
+$subnet ||= "172.18.8"
 $os ||= "ubuntu1804"
 $network_plugin ||= "flannel"
 # Setting multi_networking to true will install Multus: https://github.com/intel/multus-cni
