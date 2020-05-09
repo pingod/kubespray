@@ -49,7 +49,7 @@ download_delegate: "{% if download_localhost %}localhost{% else %}{{ groups['kub
 image_arch: "{{host_architecture | default('amd64')}}"
 
 # Versions
-kube_version: v1.17.5
+kube_version: v1.18.2
 kubeadm_version: "{{ kube_version }}"
 etcd_version: v3.3.12
 
@@ -68,11 +68,11 @@ alauda_image_repo: "index.alauda.cn"
 
 # TODO(mattymo): Move calico versions to roles/network_plugins/calico/defaults
 # after migration to container download
-calico_version: "v3.13.2"
-calico_ctl_version: "v3.13.2"
-calico_cni_version: "v3.13.2"
-calico_policy_version: "v3.13.2"
-calico_typha_version: "v3.13.2"
+calico_version: "v3.13.3"
+calico_ctl_version: "v3.13.3"
+calico_cni_version: "v3.13.3"
+calico_policy_version: "v3.13.3"
+calico_typha_version: "v3.13.3"
 typha_enabled: false
 
 flannel_version: "v0.12.0"
@@ -80,10 +80,10 @@ flannel_version: "v0.12.0"
 cni_version: "v0.8.5"
 
 weave_version: 2.6.2
-pod_infra_version: 3.1
+pod_infra_version: "3.1"
 contiv_version: 1.2.1
-cilium_version: "v1.7.2"
-kube_ovn_version: "v1.1.0"
+cilium_version: "v1.7.3"
+kube_ovn_version: "v1.1.1"
 kube_router_version: "v0.4.0"
 multus_version: "v3.4.1"
 
@@ -420,26 +420,17 @@ cni_binary_checksums:
   amd64: bd682ffcf701e8f83283cdff7281aad0c83b02a56084d6e601216210732833f9
 calicoctl_binary_checksums:
   arm:
+    v3.13.3: 0
     v3.13.2: 0
     v3.11.1: 0
-    v3.7.3: 0
-    v3.6.1: 0
-    v3.5.4: 0
-    v3.4.4: 0
   amd64:
+    v3.13.3: 570539d436df51bb349bb1a8c6b200a3a6f20803a9d391aa2c5cf19a70a083d4
     v3.13.2: 5b0361e8935e450b1b39147d5690f75474a0ab7eb5936d65fa21a5eb8bcf66d7
     v3.11.1: 045fdbfdb30789194c499ba17c8eac6d1704fe20d05e3c10027eb570767386db
-    v3.7.3: 932f68e893e80e95e10f064f1e7745e438d456f41a6ff12d11bb16ca0cab735c
-    v3.6.1: 3b01336de37550e020343d62a38c96c4605d33a3ed7ddba2fe38bc172a5b42b5
-    v3.5.4: 197194b838cc2a9a7455c2ebd5505a5e24f8f3d994eb75c17f5dd568944100b8
-    v3.4.4: 93bd084e053cf1bf3b7fef369677bd6767c30fe7135e2c7e044e31693422ef61
   arm64:
+    v3.13.3: 0c47acd6d200ba1f8348b389cd7a54771542158fef657afc633a30ddad97e272
     v3.13.2: 7936ad0a5a40a1d50e3b9a555c101d1372bc424a98e4480e6471afd3abf92451
     v3.11.1: 770e0fce9acf1927726d64a885f8350d44a3fcbf248017d0aceec58bd41fa1b8
-    v3.7.3: 7cfaab25c287f7ef93b2682d060b55bf39f76b668540de50376b5ed174209832
-    v3.6.1: 60fbaeb257061647bdf12b5ede7a0d4298a5ee216f6472e5a92bb14ef5c2a5d3
-    v3.5.4: a4481178665658658a73e4ceca9a1dff5cccded4179615c91d1c3e49fd96f237
-    v3.4.4: ff35d9e8b5c00e9fe47d05e8f5123ec98fd641370f8cd93f4fbb3d913da77ab6
 
 etcd_binary_checksum: "{{ etcd_binary_checksums[image_arch] }}"
 cni_binary_checksum: "{{ cni_binary_checksums[image_arch] }}"
@@ -511,11 +502,13 @@ nginx_image_tag: 1.17
 haproxy_image_repo: "{{ docker_image_repo }}/library/haproxy"
 haproxy_image_tag: 1.9
 
-coredns_version: "1.6.9"
+# Coredns version should be supported by corefile-migration (or at least work with)
+# bundle with kubeadm; if not 'basic' upgrade can sometimes fail
+coredns_version: "1.6.7"
 coredns_image_repo: "{{ docker_image_repo }}/coredns/coredns"
 coredns_image_tag: "{{ coredns_version }}"
 
-nodelocaldns_version: "1.15.10"
+nodelocaldns_version: "1.15.12"
 nodelocaldns_image_repo: "{{ kube_image_repo }}/k8s-dns-node-cache"
 nodelocaldns_image_tag: "{{ nodelocaldns_version }}"
 
@@ -595,8 +588,10 @@ gcp_pd_csi_attacher_image_tag: "v2.1.1-gke.0"
 gcp_pd_csi_resizer_image_tag: "v0.4.0-gke.0"
 gcp_pd_csi_registrar_image_tag: "v1.2.0-gke.0"
 
-dashboard_image_repo: "{{ gcr_image_repo }}/google_containers/kubernetes-dashboard-{{ image_arch }}"
-dashboard_image_tag: "v1.10.1"
+dashboard_image_repo: "{{ docker_image_repo }}/kubernetesui/dashboard-{{ image_arch }}"
+dashboard_image_tag: "v2.0.0"
+dashboard_metrics_scraper_repo: "{{ docker_image_repo }}/kubernetesui/metrics-scraper"
+dashboard_metrics_scraper_tag: "v1.0.4"
 
 image_pull_command: "{{ docker_bin_dir }}/docker pull"
 image_save_command: "{{ docker_bin_dir }}/docker save {{ image_reponame }} | gzip -{{ download_compress }} > {{ image_path_final }}"
@@ -1131,6 +1126,15 @@ downloads:
     container: true
     repo: "{{ dashboard_image_repo }}"
     tag: "{{ dashboard_image_tag }}"
+    sha256: "{{ dashboard_digest_checksum|default(None) }}"
+    groups:
+      - kube-master
+
+  dashboard_metrics_scrapper:
+    enabled: "{{ dashboard_enabled }}"
+    container: true
+    repo: "{{ dashboard_metrics_scraper_repo }}"
+    tag: "{{ dashboard_metrics_scraper_tag }}"
     sha256: "{{ dashboard_digest_checksum|default(None) }}"
     groups:
       - kube-master

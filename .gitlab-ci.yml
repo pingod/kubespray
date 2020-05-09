@@ -8,7 +8,7 @@ stages:
   - deploy-special
 
 variables:
-  KUBESPRAY_VERSION: v2.12.5
+  KUBESPRAY_VERSION: v2.13.0
   FAILFASTCI_NAMESPACE: 'kargo-ci'
   GITLAB_REPOSITORY: 'kargo-ci/kubernetes-sigs-kubespray'
   ANSIBLE_FORCE_COLOR: "true"
@@ -26,6 +26,7 @@ variables:
   IDEMPOT_CHECK: "false"
   RESET_CHECK: "false"
   UPGRADE_TEST: "false"
+  MITOGEN_ENABLE: "false"
   ANSIBLE_LOG_LEVEL: "-vv"
   RECOVER_CONTROL_PLANE_TEST: "false"
   RECOVER_CONTROL_PLANE_TEST_GROUPS: "etcd[2:],kube-master[1:]"

@@ -1,17 +1,6 @@
 ---
-- hosts: localhost
-  gather_facts: false
-  become: no
-  tasks:
-    - name: "Check ansible version >=2.7.8"
-      assert:
-        msg: "Ansible must be v2.7.8 or higher"
-        that:
-          - ansible_version.string is version("2.7.8", ">=")
-      tags:
-        - check
-  vars:
-    ansible_connection: local
+- name: Check ansible version
+  import_playbook: ansible_version.yml
 
 - hosts: all
   gather_facts: false
@@ -34,6 +23,7 @@
     - { role: bastion-ssh-config, tags: ["localhost", "bastion"] }
 
 - hosts: k8s-cluster:etcd:calico-rr
+  strategy: linear
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   gather_facts: false
   vars:

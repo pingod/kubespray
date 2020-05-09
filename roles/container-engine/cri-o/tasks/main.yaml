@@ -27,28 +27,9 @@
   tags:
     - facts
 
-- name: Add OpenShift Origin repository
-  yum_repository:
-    name: origin
-    description: OpenShift Origin Repo
-    baseurl: "{{ crio_rhel_repo_base_url }}"
-    gpgcheck: no
-  when: ansible_distribution in ["CentOS","RedHat","OracleLinux"] and not is_ostree
+- import_tasks: "crio_repo.yml"
 
-- name: Add CRI-O PPA
-  apt_repository:
-    repo: ppa:projectatomic/ppa
-    state: present
-  when: ansible_distribution in ["Ubuntu"]
-
-- include_tasks: "crictl.yml"
-
-- name: Install crictl
-  unarchive:
-    src: "{{ local_release_dir }}/crictl-{{ crictl_version }}-linux-{{ image_arch }}.tar.gz"
-    dest: "/usr/local/bin"
-    mode: 0755
-    remote_src: yes
+- import_tasks: "crictl.yml"
 
 - name: Make sure needed folders exist in the system
   with_items:
@@ -67,25 +48,26 @@
   with_items: "{{ crio_packages }}"
   notify: restart crio
 
+- name: Gather the rpm package facts
+  package_facts:
+    manager: auto
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "8"
+
+- name: Ensure latest version of libseccom installed
+  command: "yum update -y libseccomp"
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "8"
+    - ansible_facts.packages['libseccomp'] | map(attribute='version') | map('regex_replace','^(?P<major>\\d+).(?P<minor>\\d+).(?P<patch>\\d+)$', '\\g<major>.\\g<minor>') | list | first == '2.3'
+  notify: restart crio
+
 - name: Check if already installed
   stat:
     path: "/bin/crio"
   register: need_bootstrap_crio
   when: is_ostree
-
-- name: Enable modular repos for crio
-  ini_file:
-    path: "/etc/yum.repos.d/{{ item }}.repo"
-    section: "{{ item }}"
-    option: enabled
-    value: 1
-  become: true
-  when:
-    - is_ostree
-    - not need_bootstrap_crio.stat.exists
-  loop:
-    - "fedora-updates-modular"
-    - "fedora-modular"
 
 - name: Install cri-o packages with osttree
   command: "rpm-ostree install {{ crio_packages|join(' ') }}"
@@ -100,6 +82,14 @@
   when:
     - is_ostree
     - not need_bootstrap_crio.stat.exists
+
+- name: Remove example CNI configs
+  file:
+    path: "/etc/cni/net.d/{{ item }}"
+    state: absent
+  loop:
+    - 100-crio-bridge.conf
+    - 200-loopback.conf
 
 - name: Install cri-o config
   template:
@@ -120,6 +110,17 @@
     state: directory
     owner: root
     mode: 0755
+
+- name: Remove metacopy mount options for older kernels
+  ini_file:
+    dest: /etc/containers/storage.conf
+    section: storage.options.overlay
+    option: mountopt
+    value: "\"nodev\""
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
+
 
 - name: Write cri-o proxy drop-in
   template:

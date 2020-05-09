@@ -15,7 +15,7 @@ is_fedora_coreos: false
 disable_swap: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.17.5
+kube_version: v1.18.2
 
 ## The minimum version working
 kube_version_min_required: v1.16.0
@@ -393,16 +393,6 @@ local_volume_provisioner_storage_classes: |
 # if null then no network encryption
 # you can use --extra-vars to pass the password in command line
 weave_password: EnterPasswordHere
-
-# Weave uses consensus mode by default
-# Enabling seed mode allow to dynamically add or remove hosts
-# https://www.weave.works/docs/net/latest/ipam/
-weave_mode_seed: false
-
-# This two variable are automatically changed by the weave's role in group_vars/k8s-cluster.yml.
-# Do not manually change these values
-weave_seed: uninitialized
-weave_peers: uninitialized
 
 # Contiv L3 BGP Mode
 contiv_peer_with_uplink_leaf: false
