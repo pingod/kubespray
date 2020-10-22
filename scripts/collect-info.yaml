@@ -113,7 +113,7 @@
       when: "'etcd' in groups"
 
     - name: Storing commands output
-      shell: "{{ item.cmd }} 2>&1 | tee {{ item.name }}"
+      shell: "{{ item.cmd }} &> {{ item.name }}"
       failed_when: false
       with_items: "{{ commands }}"
       when: item.when | default(True)

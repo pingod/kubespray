@@ -1,6 +1,6 @@
 ---
 - name: Get etcd endpoint health
-  shell: "{{ bin_dir }}/etcdctl endpoint health"
+  command: "{{ bin_dir }}/etcdctl endpoint health"
   register: etcd_endpoint_health
   ignore_errors: true
   changed_when: false
@@ -58,7 +58,7 @@
     - "item.rc != 0 and not 'No such file or directory' in item.stderr"
 
 - name: Get etcd cluster members
-  shell: "{{ bin_dir }}/etcdctl member list"
+  command: "{{ bin_dir }}/etcdctl member list"
   register: member_list
   changed_when: false
   check_mode: no
@@ -74,7 +74,7 @@
     - has_quorum
 
 - name: Remove broken cluster members
-  shell: "{{ bin_dir }}/etcdctl member remove {{ item[1].replace(' ','').split(',')[0] }}"
+  command: "{{ bin_dir }}/etcdctl member remove {{ item[1].replace(' ','').split(',')[0] }}"
   environment:
     ETCDCTL_API: 3
     ETCDCTL_ENDPOINTS: "{{ etcd_access_addresses }}"
